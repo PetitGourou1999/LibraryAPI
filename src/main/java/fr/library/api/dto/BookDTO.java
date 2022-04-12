@@ -6,6 +6,8 @@ public class BookDTO {
 
 	private String title;
 
+	private Integer nbexemplaires;
+
 	private AuthorDTO author;
 
 	public BookDTO() {
@@ -26,6 +28,14 @@ public class BookDTO {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Integer getNbexemplaires() {
+		return nbexemplaires;
+	}
+
+	public void setNbexemplaires(Integer nbexemplaires) {
+		this.nbexemplaires = nbexemplaires;
 	}
 
 	public AuthorDTO getAuthor() {

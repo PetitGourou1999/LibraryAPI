@@ -52,6 +52,7 @@ public class BookService implements IBookService {
 			Book foundBook = optionalBook.get();
 			foundBook.setTitle(book.getTitle());
 			foundBook.setAuthor(mapperAuthor.authorFormToAuthor(book.getAuthor()));
+			foundBook.setNbexemplaires(book.getNbexemplaires());
 			foundBook = checkAuthor(book, foundBook);
 			return new ResponseEntity(mapper.bookToBookDTO(repository.save(foundBook)), HttpStatus.OK);
 		} else {

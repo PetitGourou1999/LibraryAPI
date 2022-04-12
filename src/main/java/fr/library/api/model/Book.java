@@ -1,5 +1,6 @@
 package fr.library.api.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,8 +22,11 @@ public class Book {
 	@Column(name = "title", length = 500, nullable = false)
 	private String title;
 
-	@ManyToOne
-	@JoinColumn(name = "authorid")
+	@Column(name = "nbexemplaires", nullable = false)
+	private Integer nbexemplaires;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "authorid", nullable = false)
 	private Author author;
 
 	public Book() {
@@ -43,6 +47,14 @@ public class Book {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Integer getNbexemplaires() {
+		return nbexemplaires;
+	}
+
+	public void setNbexemplaires(Integer nbexemplaires) {
+		this.nbexemplaires = nbexemplaires;
 	}
 
 	public Author getAuthor() {
