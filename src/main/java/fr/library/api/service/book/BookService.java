@@ -2,6 +2,8 @@ package fr.library.api.service.book;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,13 @@ import fr.library.api.model.Author;
 import fr.library.api.model.Book;
 import fr.library.api.repository.IAuthorRepository;
 import fr.library.api.repository.IBookRepository;
+import fr.library.api.service.author.AuthorService;
 import fr.library.api.utils.BookForm;
 
 @Service
 public class BookService implements IBookService {
+	
+	private static final Logger LOG = Logger.getLogger(BookService.class.getName());
 
 	private IBookMapper mapper;
 	private IAuthorMapper mapperAuthor;
@@ -54,8 +59,10 @@ public class BookService implements IBookService {
 			foundBook.setAuthor(mapperAuthor.authorFormToAuthor(book.getAuthor()));
 			foundBook.setNbexemplaires(book.getNbexemplaires());
 			foundBook = checkAuthor(book, foundBook);
+			LOG.log(Level.INFO, "updateBook : Book updated : " + foundBook);
 			return new ResponseEntity(mapper.bookToBookDTO(repository.save(foundBook)), HttpStatus.OK);
 		} else {
+			LOG.log(Level.SEVERE, "UpdateBook : Book does not exist");
 			return new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -65,9 +72,11 @@ public class BookService implements IBookService {
 		Optional<Book> optionalBook = repository.findById(id);
 		if (optionalBook.isPresent()) {
 			Book foundBook = optionalBook.get();
+			LOG.log(Level.INFO, "deleteBook : Book deleted : " + foundBook);
 			repository.delete(foundBook);
 			return new ResponseEntity(HttpStatus.OK);
 		} else {
+			LOG.log(Level.SEVERE, "UpdateBook : Book does not exist");
 			return new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -88,9 +97,11 @@ public class BookService implements IBookService {
 		Optional<Book> optionalBook = repository.findById(id);
 		if (optionalBook.isPresent()) {
 			Book foundBook = optionalBook.get();
+			LOG.log(Level.INFO, "getBookById : Book found : " + foundBook);
 			BookDTO bookToBookDTO = mapper.bookToBookDTO(foundBook);
 			return new ResponseEntity(bookToBookDTO, HttpStatus.OK);
 		} else {
+			LOG.log(Level.SEVERE, "UpdateBook : Book does not exist");
 			return new ResponseEntity<BookDTO>(HttpStatus.NOT_FOUND);
 		}
 	}

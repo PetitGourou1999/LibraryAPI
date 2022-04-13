@@ -1,6 +1,8 @@
 package fr.library.api.controller;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.validation.Valid;
 
@@ -24,6 +26,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @Api(value = " SwaggerRESTController", description = "REST API BookController")
 public class BookController {
+	
+	private static final Logger LOG = Logger.getLogger(BookController.class.getName());
 
 	private IBookService service;
 
@@ -42,9 +46,10 @@ public class BookController {
 	@PostMapping("/books")
 	public ResponseEntity<BookDTO> saveBook(@RequestBody @Valid BookForm book, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			System.out.println("[DEBUG] Binding Errors");
+			LOG.log(Level.WARNING, "Binding Errors SaveBook");
 			return new ResponseEntity<BookDTO>(new BookDTO(), HttpStatus.CONFLICT);
 		} else {
+			LOG.log(Level.INFO, "Creating Book");
 			return service.saveBook(book);
 		}
 
@@ -55,9 +60,10 @@ public class BookController {
 	public ResponseEntity<BookDTO> updateBook(@PathVariable Integer id, @RequestBody @Valid BookForm book,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			System.out.println("[DEBUG] Binding Errors");
+			LOG.log(Level.WARNING, "Binding Errors UpdateBook");
 			return new ResponseEntity<BookDTO>(new BookDTO(), HttpStatus.CONFLICT);
 		} else {
+			LOG.log(Level.INFO, "Updating Book");
 			return service.updateBook(id, book);
 		}
 
@@ -66,12 +72,14 @@ public class BookController {
 	@ApiOperation(value = "Suppression d'un livre")
 	@DeleteMapping("/books/{id}")
 	public ResponseEntity<BookDTO> deleteBook(@PathVariable Integer id) {
+		LOG.log(Level.INFO, "Trying deletion of Book : " + id);
 		return service.deleteBook(id);
 	}
 
 	@ApiOperation(value = "Récupération d'un livre par son ID")
 	@GetMapping("/books/{id}")
 	public ResponseEntity<BookDTO> getBookById(@PathVariable Integer id) {
+		LOG.log(Level.INFO, "Trying to retireve Book : " + id);
 		return service.getBookById(id);
 	}
 
